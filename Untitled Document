@@ -1,0 +1,115 @@
+ {
+      "paths": [
+        "/var/log/syslog",
+#        "/var/log/auth.log"
+       ],
+      "fields": { "type": "syslog" }
+    },
+
+
+
+
+ {
+      "paths": [
+        "/var/log/apache2/access.log",
+#        "/var/log/auth.log"
+       ],
+      "fields": { "type": "apache-access" }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+    "servers": [ "192.168.1.235:5043" ],
+ "ssl ca": "/etc/pki/tls/certs/logstash-forwarder.crt",
+    "timeout": 15
+
+
+
+{
+      "paths": [
+
+        "/var/log/syslog",
+        "/var/log/auth.log"
+       ],
+      "fields": { "type": "syslog" }
+    }
+
+
+
+
+
+
+
+
+CTX34-P6PTW-K6WT4-9V39K-VCHJF
+sudo nano .freerdp/known_hosts 
+
+
+
+kocheri@159K
+
+
+
+
+
+
+
+
+192.168.1.235:5601
+http://192.168.1.235:9200/_plugin/head/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ne
+network.bind_host: 0
+
+
+#readonlyrest:
+
+#    enable: true
+
+#    response_if_req_forbidden: Forbidden by ReadonlyREST ES plugin
+
+#    access_control_rules:
+
+
+
+#    - name: "Elasticseaech can write and create its own indices"
+
+
+
+#      # auth_key is good for testing, but replace it with `auth_key_sha1`!
+
+#      auth_key: logstash:logstash
+
+#      type: allow
+
+#      actions: ["indices:data/read/*","indices:data/write/*","indices:admin/template/*","indices:admin/create"]
+
+#      indices: ["logstash-*", "<no_index>"]
+
+

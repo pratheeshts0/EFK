@@ -1,0 +1,120 @@
+onday 19 December 2016
+[1:41:57 PM] pramod.bizruntime: https://github.com/mobz/elasticsearch-head
+[1:42:28 PM] pramod.bizruntime: this is plugin head to see in elasticsearch Ui ..that how much index r thier
+[1:42:50 PM] pramod.bizruntime: https://www.digitalocean.com/community/tutorials/how-to-install-elasticsearch-logstash-and-kibana-elk-stack-on-ubuntu-14-04
+[1:43:13 PM] pramod.bizruntime: https://github.com/sscarduzio/elasticsearch-readonlyrest-plugin
+
+
+secrity plugin
+[1:43:26 PM] pramod.bizruntime: http://logz.io/learn/complete-guide-elk-stack/
+[1:52:03 PM] pramod.bizruntime: https://www.elastic.co/guide/en/elasticsearch/reference/2.0/docs-index_.html
+[1:52:19 PM] pramod.bizruntime: https://www.elastic.co/
+[7:00:09 PM] pramod.bizruntime: curl  -XGET http://localhost:9200/_cluster/health?level=indices
+[7:01:09 PM] pramod.bizruntime: curl -XGET 'http://localhost:9200/_cluster/health?pretty=true
+ Tuesday 20 December 2016
+[4:59:27 PM] pramod.bizruntime: https://github.com/sscarduzio/elasticsearch-readonlyrest-plugin
+[6:08:45 PM] pramod.bizruntime: network.bind_host: 0
+#http.cors.enabled: true
+#http.cors.allow-origin: /https?:\/\/localhost(:[0-9]+)?/
+
+
+
+
+
+readonlyrest:
+    enable: true
+    response_if_req_forbidden: Forbidden by ReadonlyREST ES plugin
+    access_control_rules:
+
+    - name: "Elasticseaech can write and create its own indices"
+      # auth_key is good for testing, but replace it with `auth_key_sha1`!
+      auth_key: admin:masteradmin
+      type: allow
+      actions: ["indices:data/read/*","indices:data/write/*","indices:admin/template/*","indices:admin/create"]
+      indices: ["logstash-*", "<no-index>"]
+ Friday 23 December 2016
+[3:23:35 PM] pramod.bizruntime: ##install td-agent
+curl -L https://toolbelt.treasuredata.com/sh/install-ubuntu-trusty-td-agent2.sh | sh
+##install plgin
+sudo /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-elasticsearch
+
+##check conf file is correct or not 
+td-agent -c td-agent.conf
+[3:23:59 PM] pramod.bizruntime: /etc/td-agetn/td-agent.conf
+[3:24:18 PM] pramod.bizruntime: # syslog
+<source>
+  type tail
+  format /^\[[^ ]* (?<time>[^\]]*)\] \[(?<level>[^\]]*)\] (?<message>.*)$/
+  time_format %b %d %H:%M:%S %Y
+  path /var/log/syslog
+  tag error
+</source>
+
+# Listen to Syslog
+<source>
+  type syslog
+  port 5140/var/lib/docker/con
+bind  0.0.0.0
+tag system
+</source>
+
+<match *.**>
+
+   @type elasticsearch
+    host 172.16.100.24
+    port 9200
+    include_tag_key true
+    tag_key @log_name
+ user admin
+password admin
+    index_name web-01
+    type_name web-01
+     logstash_prefix web-01
+   logstash_format true
+    flush_interval 10s
+</match>
+[3:26:17 PM] pramod.bizruntime: <match sys>
+
+   @type elasticsearch
+    host 127.0.0.1
+    port 9200
+    include_tag_key true
+    tag_key @log_name
+ user admin
+password admin
+    index_name machine-syslog
+    type_name machine-syslog
+
+     logstash_prefix machine-syslog
+
+   logstash_format true
+    flush_interval 10s
+</match>
+[3:45:27 PM] pramod.bizruntime: https://github.com/GoogleCloudPlatform/fluentd-catch-all-config/blob/master/configs/config.d/syslog.conf
+[4:42:42 PM] pramod.bizruntime: pos_file /var/log/td-agent/access.log.pos
+give permsiion 777 to that
+[7:55:03 PM] pramod.bizruntime: readonlyrest:
+    enable: true
+    response_if_req_forbidden: Forbidden by ReadonlyREST ES plugin
+    access_control_rules:
+
+    - name: "Elasticseaech can write and create its own indices"
+      # auth_key is good for testing, but replace it with `auth_key_sha1`!
+      auth_key: admin:masteradmin
+      type: allow
+      actions: ["indices:data/read/*","indices:data/write/*","indices:admin/template/*","indices:admin/create"]
+      indices: ["logstash-*", "<no-index>"]
+    - name: Admin Usage for Server (we trust this server side component, full access granted via HTTP authentication)
+      auth_key: admin:masteradmin
+      type: allow
+    - name: Odoo-01 Machine (This server side component, only access granted via HTTP authentication with below username password)
+      auth_key: odoo-01:odoo-01@123
+      type: allow
+      kibana_access: ro
+      indices: [ ".kibana*", "odoo-*"]
+    - name: IMS-01 Machine (This server side component, only access granted via HTTP authentication with below username password)
+      auth_key: ims-01:ims-01@123
+      type: allow
+      kibana_access: ro
+      indices: [ ".kibana*", "ims-*"]
+
